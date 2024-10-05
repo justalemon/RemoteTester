@@ -15,8 +15,6 @@
 #define OLED_RESET -1
 #define OLED_ADDRESS 0x3C
 #define OLED_TEXT_SIZE 2
-#define RGB_PIN 16  // WaveShare RP2040 Zero
-#define RGB_COUNT 1 // Number of pixels
 #define DELAY_IDLE 150
 
 #if !defined(OLED_SDA) || !defined(OLED_SCL)
@@ -34,7 +32,9 @@
 // #define OLED_SCL 1
 
 Adafruit_SSD1306 display(OLED_WIDTH, OLED_HEIGHT, &Wire, -1);
-Adafruit_NeoPixel pixels(RGB_COUNT, RGB_PIN, NEO_GRB + NEO_KHZ800);
+#if defined(RGB_PIN)
+    Adafruit_NeoPixel pixels(RGB_COUNT, RGB_PIN, NEO_GRB + NEO_KHZ800);
+#endif
 
 bool screenAvailable = false;
 bool changedOnce = false;
