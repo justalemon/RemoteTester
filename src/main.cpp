@@ -28,7 +28,7 @@ bool screenAvailable = false;
 bool changedOnce = false;
 int lastUpdate = 0;
 
-void init()
+void initDisplayParams()
 {
     display.clearDisplay();
     display.setTextSize(OLED_TEXT_SIZE);
@@ -58,7 +58,7 @@ void setup()
     {
         screenAvailable = true;
         Serial.println("OLED Screen available");
-        init();
+        initDisplayParams();
         display.println("Bienvenido");
         display.println("");
         display.println("Presione");
@@ -85,7 +85,7 @@ void loop()
 
     if (IrReceiver.decode())
     {
-        init();
+        initDisplayParams();
         display.print("P:");
         display.println(IrReceiver.decodedIRData.protocol);
         display.print("C:");
