@@ -88,7 +88,7 @@ void setup()
         #else
             display.println("Welcome");
             display.println("");
-            display.println("press");
+            display.println("Press");
             display.println("a button");
         #endif
         display.display();
