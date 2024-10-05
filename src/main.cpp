@@ -32,7 +32,7 @@
 // #define OLED_SCL 1
 
 Adafruit_SSD1306 display(OLED_WIDTH, OLED_HEIGHT, &Wire, -1);
-#if defined(RGB_PIN)
+#ifdef RGB_PIN
     Adafruit_NeoPixel pixels(RGB_COUNT, RGB_PIN, NEO_GRB + NEO_KHZ800);
 #else
     #warning "Compiling with no RGB Led Indicator support"
@@ -66,7 +66,7 @@ void setup()
     Serial.begin(9600);
     Serial.println("Setting SDA/SCL to 0/1");
 
-    #if defined(ARDUINO_ARCH_RP2040)
+    #ifdef ARDUINO_ARCH_RP2040
         Wire.setSCL(OLED_SCL);
         Wire.setSDA(OLED_SDA);
     #else
