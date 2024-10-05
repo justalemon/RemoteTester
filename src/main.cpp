@@ -50,6 +50,13 @@ void setup()
     Serial.begin(9600);
     Serial.println("Setting SDA/SCL to 0/1");
 
+    #if defined(ARDUINO_ARCH_RP2040) && !defined(__MBED__)
+        Wire.setSCL(OLED_SCL);
+        Wire.setSDA(OLED_SDA);
+    #else
+        Wire.setPins(OLED_SDA, OLED_SCL);
+    #endif
+
     Serial.println("Initializing RGB LED");
     pixels.begin();
     setColor(168, 50, 153);
