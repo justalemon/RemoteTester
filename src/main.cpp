@@ -80,10 +80,17 @@ void setup()
         screenAvailable = true;
         Serial.println("OLED Screen available");
         initDisplayParams();
-        display.println("Bienvenido");
-        display.println("");
-        display.println("Presione");
-        display.println("un boton");
+        #ifdef SPANISH
+            display.println("Bienvenido");
+            display.println("");
+            display.println("Presione");
+            display.println("un boton");
+        #else
+            display.println("Welcome");
+            display.println("");
+            display.println("press");
+            display.println("a button");
+        #endif
         display.display();
     }
     else
