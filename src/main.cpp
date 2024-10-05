@@ -14,12 +14,24 @@
 #define OLED_HEIGHT 64
 #define OLED_RESET -1
 #define OLED_ADDRESS 0x3C
-#define OLED_SDA 0
-#define OLED_SCL 1
 #define OLED_TEXT_SIZE 2
 #define RGB_PIN 16  // WaveShare RP2040 Zero
 #define RGB_COUNT 1 // Number of pixels
 #define DELAY_IDLE 150
+
+#if !defined(OLED_SDA) || !defined(OLED_SCL)
+    #if defined(ARDUINO_ARCH_RP2040)
+        #define OLED_SDA PIN_WIRE0_SDA
+        #define OLED_SCL PIN_WIRE0_SCL
+    #elif defined(ARDUINO_ARCH_ESP32)
+        #define OLED_SDA SDA
+        #define OLED_SCL SCL
+    #endif
+#endif
+
+// If you want to set custom pins
+// #define OLED_SDA 0
+// #define OLED_SCL 1
 
 Adafruit_SSD1306 display(OLED_WIDTH, OLED_HEIGHT, &Wire, -1);
 Adafruit_NeoPixel pixels(RGB_COUNT, RGB_PIN, NEO_GRB + NEO_KHZ800);
@@ -50,7 +62,7 @@ void setup()
     Serial.begin(9600);
     Serial.println("Setting SDA/SCL to 0/1");
 
-    #if defined(ARDUINO_ARCH_RP2040) && !defined(__MBED__)
+    #if defined(ARDUINO_ARCH_RP2040)
         Wire.setSCL(OLED_SCL);
         Wire.setSDA(OLED_SDA);
     #else
