@@ -34,6 +34,8 @@
 Adafruit_SSD1306 display(OLED_WIDTH, OLED_HEIGHT, &Wire, -1);
 #if defined(RGB_PIN)
     Adafruit_NeoPixel pixels(RGB_COUNT, RGB_PIN, NEO_GRB + NEO_KHZ800);
+#else
+    #warning "Compiling with no RGB Led Indicator support"
 #endif
 
 bool screenAvailable = false;
