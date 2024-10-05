@@ -27,10 +27,6 @@
     #endif
 #endif
 
-// If you want to set custom pins
-// #define OLED_SDA 0
-// #define OLED_SCL 1
-
 Adafruit_SSD1306 display(OLED_WIDTH, OLED_HEIGHT, &Wire, -1);
 #ifdef RGB_PIN
     Adafruit_NeoPixel pixels(RGB_COUNT, RGB_PIN, NEO_GRB + NEO_KHZ800);
