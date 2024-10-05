@@ -53,10 +53,12 @@ void initDisplayParams()
 
 void setColor(uint8_t r, uint8_t g, uint8_t b)
 {
-    pixels.clear();
-    pixels.fill(pixels.Color(r, g, b));
-    pixels.setBrightness(10);
-    pixels.show();
+    #ifdef RGB_PIN
+        pixels.clear();
+        pixels.fill(pixels.Color(r, g, b));
+        pixels.setBrightness(10);
+        pixels.show();
+    #endif
 }
 
 void setup()
@@ -71,9 +73,11 @@ void setup()
         Wire.setPins(OLED_SDA, OLED_SCL);
     #endif
 
-    Serial.println("Initializing RGB LED");
-    pixels.begin();
-    setColor(168, 50, 153);
+    #ifdef RGB_PIN
+        Serial.println("Initializing RGB LED");
+        pixels.begin();
+        setColor(168, 50, 153);
+    #endif
 
     if (display.begin(SSD1306_SWITCHCAPVCC, OLED_ADDRESS))
     {
@@ -127,7 +131,9 @@ void loop()
     }
     else if (changedOnce && lastUpdate + DELAY_IDLE < millis())
     {
-        pixels.setBrightness(0);
-        pixels.show();
+        #ifdef RGB_PIN
+            pixels.setBrightness(0);
+            pixels.show();
+        #endif
     }
 }
