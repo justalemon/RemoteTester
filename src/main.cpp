@@ -17,7 +17,7 @@
 #define OLED_SDA 0
 #define OLED_SCL 1
 #define OLED_TEXT_SIZE 2
-#define RGB_PIN 16 // WaveShare RP2040 Zero
+#define RGB_PIN 16  // WaveShare RP2040 Zero
 #define RGB_COUNT 1 // Number of pixels
 #define DELAY_IDLE 150
 
@@ -28,78 +28,85 @@ bool screenAvailable = false;
 bool changedOnce = false;
 int lastUpdate = 0;
 
-void init() {
-  display.clearDisplay();
-  display.setTextSize(OLED_TEXT_SIZE);
-  display.setTextColor(WHITE);
-  display.setCursor(0, 0);
-  display.cp437(true);
+void init()
+{
+    display.clearDisplay();
+    display.setTextSize(OLED_TEXT_SIZE);
+    display.setTextColor(WHITE);
+    display.setCursor(0, 0);
+    display.cp437(true);
 }
 
-void setColor(uint8_t r, uint8_t g, uint8_t b) {
-  pixels.clear();
-  pixels.fill(pixels.Color(r, g, b));
-  pixels.setBrightness(10);
-  pixels.show();
-}
-
-void setup() {
-  Serial.begin(9600);
-  Serial.println("Setting SDA/SCL to 0/1");
-
-  Wire.setSDA(OLED_SDA);
-  Wire.setSCL(OLED_SCL);
-
-  Serial.println("Initializing RGB LED");
-  pixels.begin();
-  setColor(168, 50, 153);
-
-  if (display.begin(SSD1306_SWITCHCAPVCC, OLED_ADDRESS)) {
-    screenAvailable = true;
-    Serial.println("OLED Screen available");
-    init();
-    display.println("Bienvenido");
-    display.println("");
-    display.println("Presione");
-    display.println("un boton");
-    display.display();
-  } else {
-    Serial.println("OLED Screen NOT available");
-  }
-  
-  Serial.println("Initializing IR");
-
-  setLEDFeedback(13, LED_FEEDBACK_ENABLED_FOR_RECEIVE);
-  IrReceiver.begin(29, true, 25);
-}
-
-void loop() {
-  if (!screenAvailable) {
-    return;
-  }
-  
-  if (IrReceiver.decode()) {
-    init();
-    display.print("P:");
-    display.println(IrReceiver.decodedIRData.protocol);
-    display.print("C:");
-    display.println(IrReceiver.decodedIRData.command);
-    display.print("W:");
-    display.println(millis());
-    display.print("R:");
-    display.println(IrReceiver.decodedIRData.decodedRawData);
-    display.display();
-
-    setColor(255, 165, 0);
-
-    IrReceiver.printIRResultShort(&Serial);
-    IrReceiver.resume();
-
-    lastUpdate = millis();
-    changedOnce = true;
-  }
-  else if (changedOnce && lastUpdate + DELAY_IDLE < millis()) {
-    pixels.setBrightness(0);
+void setColor(uint8_t r, uint8_t g, uint8_t b)
+{
+    pixels.clear();
+    pixels.fill(pixels.Color(r, g, b));
+    pixels.setBrightness(10);
     pixels.show();
-  }
+}
+
+void setup()
+{
+    Serial.begin(9600);
+    Serial.println("Setting SDA/SCL to 0/1");
+
+    Serial.println("Initializing RGB LED");
+    pixels.begin();
+    setColor(168, 50, 153);
+
+    if (display.begin(SSD1306_SWITCHCAPVCC, OLED_ADDRESS))
+    {
+        screenAvailable = true;
+        Serial.println("OLED Screen available");
+        init();
+        display.println("Bienvenido");
+        display.println("");
+        display.println("Presione");
+        display.println("un boton");
+        display.display();
+    }
+    else
+    {
+        Serial.println("OLED Screen NOT available");
+    }
+
+    Serial.println("Initializing IR");
+
+    setLEDFeedback(13, LED_FEEDBACK_ENABLED_FOR_RECEIVE);
+    IrReceiver.begin(29, true, 25);
+}
+
+void loop()
+{
+    if (!screenAvailable)
+    {
+        return;
+    }
+
+    if (IrReceiver.decode())
+    {
+        init();
+        display.print("P:");
+        display.println(IrReceiver.decodedIRData.protocol);
+        display.print("C:");
+        display.println(IrReceiver.decodedIRData.command);
+        display.print("W:");
+        display.println(millis());
+        display.print("R:");
+        display.println(IrReceiver.decodedIRData.decodedRawData);
+        display.display();
+
+        setColor(255, 165, 0);
+
+        IrReceiver.printIRResultShort(&Serial);
+        IrReceiver.resume();
+
+        lastUpdate = millis();
+        changedOnce = true;
+    }
+    else if (changedOnce && lastUpdate + DELAY_IDLE < millis())
+    {
+        pixels.setBrightness(0);
+        pixels.show();
+    }
 }
